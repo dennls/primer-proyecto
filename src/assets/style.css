@@ -1,11 +1,9 @@
 @import url("https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css");
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 .paginaLogin {
   background-color: #c9d6ff;
   background: linear-gradient(to right #e2e2e2, #c9d6ff);
@@ -25,7 +23,6 @@
   max-width: 100%;
   min-height: 480px;
 }
-
 .contenedorLogin p {
   font-size: 14px;
   line-height: 20px;
@@ -94,7 +91,7 @@
 .contenedorLogin.active .sign-in {
   transform: translateX(100%);
 }
-.sign-p {
+.sign-up {
   left: 0;
   width: 50%;
   opacity: 0;
@@ -121,7 +118,6 @@
 .social-icons {
   margin: 20px 0;
 }
-
 .social-icons a {
   border-radius: 20%;
   display: inline-flex;
@@ -176,35 +172,19 @@
   transform: translateX(0);
   transition: all 0.6s ease-in-out;
 }
-
 .toggle-left {
-
   transform: translateX(-200%);
-
 }
-
 .contenedorLogin.active .toggle-left {
-
   transform: translateX(0);
-
 }
-
 .toggle-right {
-
   right: 0;
-
   transform: translateX(0);
-
 }
-
 .contenedorLogin.active .toggle-right {
-
   transform: translateX(200%);
-
 }
-
 .icon{
-
   color: #512da8;
-
 }

@@ -8,7 +8,9 @@ import carrito from '@/views/carrito.vue'
 import ventas from '@/views/ventas.vue'
 import layoutApp from '@/layout/layoutApp.vue'
 import loginpage from '@/views/Auth/loginpage.vue'
-import PerfilView from '@/views/perfilView.vue'
+import ProveedoresComponent from "../views/Proveedores.vue";
+import FormularioProveedorComponent from "../views/FormularioProveedor.vue";
+import perfilView from '@/views/perfilView.vue'
 
 const routes = [
 
@@ -20,6 +22,11 @@ const routes = [
     path: '/',
     component: layoutApp,
     children: [
+      {
+        path: "/home",
+        name: "home",
+        component: HomeView,
+      },
       
       {
         path: '/contactos',
@@ -61,7 +68,15 @@ const routes = [
       {
         path: '/perfil',
         name: 'perfil',
-        component: PerfilView
+        component: perfilView
+      },
+      {
+        path: "/proveedores",
+        component: ProveedoresComponent,
+      },
+      {
+        path: "/proveedor-formulario/:idProveedor?",
+        component: FormularioProveedorComponent
       }
 
     ]
