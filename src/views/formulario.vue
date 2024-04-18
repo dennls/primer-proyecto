@@ -1,134 +1,132 @@
 <template>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Nuevo Registro</h4>
-                    <div class="form-goup">
-                        <div class="row mb-3">
-                            <label for="codigo" class="col-sm-2 col-form-label">Codigo</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="codigo" v-model="datos.codigo"
-                                    :class="{ 'border-danger': detectados.codigo }">
-                            </div>
-
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Nuevo Registro</h4>
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="codigo">Codigo <small class="text-danger">*</small></label>
+                            <input type="text" class="form-control" name="codigo" id="codigo" v-model="producto.codigo"
+                                placeholder="cod-12" :class="{ 'border-danger': detectados.codigo }">
+                            <small class="text-danger" v-show="detectados.codigo">{{ detectados.codigo
+                                }}</small>
                         </div>
-                        <div class="row mb-3">
-                            <label for="nombre" class="col-sm-2 col-form-label">Producto</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="nombre" v-model="datos.nombre"
-                                    :class="{ 'border-danger': detectados.nombre }">
-                            </div>
-
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="nombre">Nombre <small class="text-danger">*</small></label>
+                            <input type="text" class="form-control" name="nombre" id="nombre" v-model="producto.nombre"
+                                placeholder="Escriba..." :class="{ 'border-danger': detectados.nombre }">
+                            <small class="text-danger" v-show="detectados.nombre">{{ detectados.nombre
+                                }}</small>
                         </div>
-                        <div class="row mb-3">
-                            <label for="precio" class="col-sm-2 col-form-label">Precio</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="precio" placeholder=""
-                                    v-model="datos.precio_venta"
-                                    :class="{ 'border-danger': detectados.precio_venta }"><small class="text-danger"
-                                    v-show="detectados.precio_venta"></small>
-                            </div>
-
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="precio_venta">Precio venta <small class="text-danger">*</small></label>
+                            <input type="text" class="form-control" name="precio_venta" id="precio_venta"
+                                placeholder="12.5" v-model="producto.precio_venta"
+                                :class="{ 'border-danger': detectados.precio_venta }">
+                            <small class="text-danger" v-show="detectados.precio_venta">{{
+                                detectados.precio_venta }}</small>
                         </div>
-                        <div class="row mb-3">
-                            <label for="descripcion" class="col-sm-2 col-form-label">Descripcion</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" name="descripcion" id="descripcion" cols="3" rows="3"
-                                    v-model="datos.descripcion"></textarea>
-                            </div>
-
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="precio_compra">Precio compra <small class="text-danger">*</small></label>
+                            <input type="text" class="form-control" name="precio_compra" id="precio_compra"
+                                placeholder="12.5" v-model="producto.precio_compra"
+                                :class="{ 'border-danger': detectados.precio_compra }">
+                            <small class="text-danger" v-show="detectados.precio_compra">{{
+                                detectados.precio_compra }}</small>
                         </div>
-                        <div class="card-footer text-end">
-                            <button type="button" class="btn btn-dark" @click="cancelar()">Candelar</button>
-                            <button type="button" class="btn btn-primary" @click="guardarProd()">Agregar</button>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="descripcion">Descripcion</label>
+                            <textarea class="form-control" name="descripcion" id="descripcion" placeholder="Escriba"
+                                v-model="producto.descripcion"></textarea>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="card-footer text-end bg-primary">
+                <button type="button" class="btn btn-danger me-1" @click="cancelar">Cancelar</button>
+                <button type="button" class="btn btn-success ms-1 text-white" @click="guardarProducto">Guardar</button>
             </div>
         </div>
     </div>
 </template>
 <script>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
 import axios from 'axios'
-import router from '@/router';
 export default {
     setup() {
         const router = useRouter();
-        const datos = ref({
-            codigo: '',
-            nombre: '',
-            descripcion: '',
-            precio_venta: '',
-        });
-        const usuer = {
-            username: 'spiritviking@gmil.com',
-            password: '123654789',
-        };
-        const basicAuth = btoa(usuer.username + ':' + usuer.password);
-        const headers = {
-            'Content-Tipe': 'aplication/json',
-            'Accept': 'aplication/json',
-            'Authorization': 'Basic ' + basicAuth
-        };
-        let urlBase = 'https://api.repuestosangel.net/api/';
+        const productoId = router.currentRoute.value.params.idProd;
         const producto = ref({
-            nombre: '',
             codigo: '',
+            nombre: '',
             descripcion: '',
             precio_venta: '',
+            precio_compra: '',
         });
         const detectados = ref({});
-        let productId = router.currentRoute.value.params.idProd;
+        let token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + token
+        }
+        let urlBase = 'https://api.repuestosangel.net/api/';
         onMounted(() => {
-            if (productId != '') {
-                editProd();
+            if (token == null) {
+                router.push({ path: '/login' });
+            } else if (productoId != '') {
+                editarProducto();
             }
         })
-
         const cancelar = () => {
-            router.push({ path: '/product' });
+            router.push({ path: '/productos' });
         }
-
-        const guardarProd = async () => {
+        const guardarProducto = async () => {
             detectados.value = {};
             try {
-                const { data } = await axios.post(urlBase + 'productos', datos.value, { headers });
+                if (productoId != '') {
+                    const { data } = await axios.put(urlBase + 'productos/' + productoId, producto.value, { headers });
+                } else {
+                    const { data } = await axios.post(urlBase + 'productos', producto.value, { headers });
+                }
                 cancelar();
             } catch (error) {
                 if (error.response.status == 422) {
                     detectados.value = error.response.data.errors;
-                } else {
-                    alert("Contacte con el soporte de sistemas, Gracias");
+                } else {// if (condicion) {
+                    alert('Contacte con el soporte de sistemas, Gracias')
                 }
             }
-        };
-        const editProd = async () => {
-            detectados.value = {};
+        }
+        const editarProducto = async () => {
             try {
-                const { data } = await axios.get(urlBase + 'productos/' + productId, { headers });
-                console.log(data)
-                datos.value = {
-                    codigo: data.datos.codigo,
-                    nombre: data.datos.nombre,
-                    descripcion: data.datos.descripcion,
-                    precio_venta: data.datos.precio_venta,
-
-                }
+                const { data: { datos } } = await axios.get(urlBase + 'productos/' + productoId, { headers });
+                producto.value = {
+                    codigo: datos.codigo,
+                    nombre: datos.nombre,
+                    descripcion: datos.descripcion,
+                    precio_venta: datos.precio_venta,
+                    precio_compra: datos.precio_compra,
+                };
             } catch (error) {
-                console.log(error);
+                console.log(error)
             }
-        };
-
+        }
         return {
-            guardarProd,
+            producto,
             detectados,
             cancelar,
-            datos,
-            editProd
-
+            guardarProducto,
         }
     }
 }

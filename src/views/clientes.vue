@@ -1,15 +1,12 @@
 <template>
-    <div class="container mt-5">
+  <div class="container mt-5">
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-12 col-md-6 mb-4">
-                                <h4>Proveedores</h4>
-                            </div>
-                            <div class="col-12 col-md-6 mb-4 text-end">
-                                <button type="button" class="btn btn-primary " @click="nuevoRegistro">Agregar</button>
+                            <div class="col-12 col-md-6 text-center mb-4">
+                                <button type="button" class="btn btn-primary" @click="nuevoRegistro">Agregar</button>
                             </div>
                             <div class="col-12">
                                 <div class="table-responsive">
@@ -19,7 +16,6 @@
                                                 <th>Item</th>
                                                 <th>Nombres y apellidos</th>
                                                 <th>Nro identificacion</th>
-                                                <th>Contacto</th>
                                                 <th>Estado</th>
                                                 <th>Operaciones</th>
                                             </tr>
@@ -30,38 +26,19 @@
                                                 <td>{{ item.nombre }} {{ item.apellido != null ? item.apellido : '' }}
                                                 </td>
                                                 <td>{{ item.identificacion }}</td>
-                                                <td>{{ item.contacto }}</td>
                                                 <td><span class="badge" :class="item.estado ? 'bg-success' : 'bg-danger'">{{
                                                         item.estado?'Activo':'Inactivo'}}</span></td>
                                                 <td>
-                                                    <button @click="editar(item.id)" class="btn btn-warning btn-sm">
-                                                        ✍️
-                                                    </button>
-                                                    <button v-if="item.estado" @click="cambiarEstado(item.id, 'Inactivar')" class="btn btn-danger btn-sm">
-                                                        🚫
-                                                    </button>
-                                                    <button v-else @click="cambiarEstado(item.id, 'Activar')" class="btn btn-primary btn-sm">
-                                                        ✔
-                                                    </button>
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-sm" @click="verProd(items.id)"><i class="far fa-edit"></i></button>
+                                                        <button type="button" class="btn btn-sm" @click="cambiarEstado(item.id, ' Activar')" v-if="item.estado"><i class="far fa-trash-alt"></i></button>
+                                                        <button type="button" class="btn btn-sm" @click="cambiarEstado(item.id, ' Inactivar')" v-else><i class="fas fa-check"></i></button>
+                                                    </div>                                                    
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-                            <div class="col-12">
-                                <nav aria-label="...">
-                                    <ul class="pagination">
-                                        <li class="page-item" :class="{ 'disabled': paginacion.prev == false }">
-                                            <button type="button" class="page-link"
-                                                @click="anteriorPagina">Anterior</button>
-                                        </li>
-                                        <li class="page-item" :class="{ 'disabled': paginacion.next == false }">
-                                            <button type="button" class="page-link"
-                                                @click="siguientePagina">Siguiente</button>
-                                        </li>
-                                    </ul>
-                                </nav>
                             </div>
                         </div>
                     </div>
@@ -70,12 +47,13 @@
         </div>
     </div>
 </template>
+
 <script>
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 export default {
-    setup() {
+    setup(){
         const items = ref([]);
         const router = useRouter();
         let token = localStorage.getItem('token');
@@ -97,10 +75,11 @@ export default {
             next: true,
             prev: false,
             last_page: null
-        })
+        });
+
         const listar = async () => {
             try {
-                const { data: { datos } } = await axios.get(urlBase + 'proveedores?page=' + paginacion.value.pagina, { headers });
+                const { data: { datos } } = await axios.get(urlBase + 'clientes?page=' + paginacion.value.pagina, { headers });
                 items.value = datos.data;
                 paginacion.value.last_page = datos.last_page;
                 if (paginacion.value.last_page == paginacion.value.pagina) {
@@ -116,52 +95,38 @@ export default {
             } catch (error) {
                 console.log(error);
             }
-        }
-        const siguientePagina = () => {
-            if (paginacion.value.last_page > paginacion.value.pagina) {
-                paginacion.value.pagina++;
-                listar();
-            }
-        }
-        const anteriorPagina = () => {
-            if (paginacion.value.pagina > 1) {
-                paginacion.value.pagina--;
-                listar();
-            }
-        }
-
-
+        };
+        
         const nuevoRegistro = () => {
-            router.push({ path: '/proveedor-formulario' });
+            router.push({ path: '/cliente-formulario' });
+            
         }
 
-        const editar = (param) => {
-            router.push({ path: '/proveedor-formulario/' + param });
-        }
-
-        const cambiarEstado = async (elid, tipo) => {
-            let confirmacion = confirm('Esta seguro de ' + tipo + ' el Proveedor?');
+        const cambiarEstado = async (param , tipo) =>{
+            let confirmacion = confirm('esta seguro de ' + tipo + 'el proovedor?')
             if(!confirmacion){
                 return;
             }
-            try {
-                const { data } = await axios.delete(urlBase + 'proveedores/' + elid , { headers });
+            try{
+                const {data} = await axios.delete(urlBase + 'clientes/' + param, {headers});
                 listar();
-            } catch (error) {
-                console.log(error);
+            }catch(error){
+                console.log(error)
             }
         }
 
-        return {
+
+
+        return{
             items,
-            paginacion,
-            nuevoRegistro,
-            editar,
             cambiarEstado,
-            siguientePagina,
-            anteriorPagina
+            nuevoRegistro
         }
     }
+
 }
 </script>
-<style></style>
+
+<style>
+
+</style>

@@ -2,8 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import ContactView from '@/views/ContactView.vue'
 import rickandmorthy from '@/views/rickandmorthy.vue'
-import product from '@/views/product.vue'
-import formulario from '@/views/formulario.vue'
+//import Formulario from '@/views/Formulario.vue'
 import carrito from '@/views/carrito.vue'
 import ventas from '@/views/ventas.vue'
 import layoutApp from '@/layout/layoutApp.vue'
@@ -11,6 +10,11 @@ import loginpage from '@/views/Auth/loginpage.vue'
 import ProveedoresComponent from "../views/Proveedores.vue";
 import FormularioProveedorComponent from "../views/FormularioProveedor.vue";
 import perfilView from '@/views/perfilView.vue'
+import Clientes from '@/views/clientes.vue'
+import FormularioClienteComponent from '@/views/FormularioClientes.vue'
+import Compras from "@/views/Compras.vue"
+import Productos from '@/views/Productos.vue'
+import Formulario from '@/views/formulario.vue'
 
 const routes = [
 
@@ -38,14 +42,13 @@ const routes = [
         component: rickandmorthy
       },
       {
-        path: '/product',
-        name: product,
-        component: product
+        path: '/productos',
+        name: Productos,
+        component: Productos
       },
       {
         path: '/formulario/:idProd?',
-        name: formulario,
-        component: formulario
+        component: Formulario
       },
       {
         path: '/carrito',
@@ -77,7 +80,19 @@ const routes = [
       {
         path: "/proveedor-formulario/:idProveedor?",
         component: FormularioProveedorComponent
-      }
+      },
+      {
+        path: "/clientes",
+        component: Clientes
+      },
+      {
+        path: "/cliente-formulario/:idCliente?",
+        component: FormularioClienteComponent
+      },
+      {
+        path: "/compras",
+        component: Compras
+      },
 
     ]
   },

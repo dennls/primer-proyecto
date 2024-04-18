@@ -25,9 +25,10 @@
                                 Sistema ventas
                             </a>
                             <ul class="dropdown-menu">
-                                <li><router-link class="dropdown-item" to="/product">Producto</router-link></li>
+                                <li><router-link class="dropdown-item" to="/productos">Producto</router-link></li>
                                 <li><router-link class="dropdown-item" to="/ventas">Ventas</router-link></li>
                                 <li><router-link class="dropdown-item" to="/carrito">Carrito</router-link></li>
+                                <li><router-link class="dropdown-item" to="/clientes">Clientes</router-link></li>
                             </ul>
                         </li>
                     </ul>
